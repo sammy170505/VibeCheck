@@ -3,8 +3,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './pages/home';  
-import MoodCalendar from './pages/moodCalendar';  
-import LoginPage from './pages/Login';  // Import the Login page
+import MoodCalendar from './pages/moodCalender';  
+import LoginPage from './pages/login';  // Import the Login page
 
 const Stack = createStackNavigator();
 
