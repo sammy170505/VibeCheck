@@ -1,50 +1,68 @@
-// Login Page 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'frontend/App.css';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';  // Import navigation hook
 
-const Login = () => {
-    const [username, setUsername] = useState('');
-    const[password, setPassword] = useState('');
-    const navigate = useNavigate();
+const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigation = useNavigation();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleLogin = () => {
+    // Simple validation (in a real app, you'd validate more robustly)
+    if (username && password) {
+      // Navigate to the Home screen if login is successful
+      navigation.navigate('Home');
+    } else {
+      alert('Please enter both username and password');
+    }
+  };
 
-        if (username && password) {
-            navigate('/home')
-        } else {
-            alert('Please enter a valid username and password');
-        }
-    };
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Login Screen</Text>
 
-    return (
-        <div className="login-container">
-            <h1> Welcome to VibeCheck!</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="input-container">
-                    <label htmlFor="username">Username</label>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="input-container">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="login-button">Login</button>
-            </form>
-        </div>
-    );
+      {/* Username Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Username"
+        value={username}
+        onChangeText={setUsername}  // Update the username state
+      />
+
+      {/* Password Input */}
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Password"
+        secureTextEntry={true}  // Hide the password input
+        value={password}
+        onChangeText={setPassword}  // Update the password state
+      />
+
+      {/* Login Button */}
+      <Button title="Login" onPress={handleLogin} />
+    </View>
+  );
 };
-export default Login;
+
+// Simple styles
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  heading: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 5,
+  },
+});
+
+export default LoginPage;

@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "expo": "^51.0.36",
@@ -21,6 +22,24 @@
     "react-native-screens": "^3.34.0",
     "typescript": "~5.3.3",
     "@types/react": "~18.2.79"
+=======
+    "@clerk/clerk-expo": "^2.2.21",
+    "@expo/metro-runtime": "~3.2.3",
+    "@pinata/sdk": "^2.1.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "expo": "~51.0.28",
+    "expo-secure-store": "^13.0.2",
+    "expo-status-bar": "~1.12.1",
+    "expo-web-browser": "^13.0.3",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.7.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.3.1",
+    "react-native": "^0.75.4",
+    "react-native-web": "~0.19.10"
+>>>>>>> 2165e5a67d0fb087c9b92ae48c84717d84c938f4
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

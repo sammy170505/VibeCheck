@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Set up routes between Home, circle and moodCalender
 import { NavigationContainer } from '@react-navigation/native';
 import { creatStackNavigator } from '@react-navigation/stack';
@@ -20,3 +21,6 @@ const Routes = () => {
 };
 
 export default Routes;
+=======
+// Set up routes between Home, circle and moodCalender
+>>>>>>> 2165e5a67d0fb087c9b92ae48c84717d84c938f4
