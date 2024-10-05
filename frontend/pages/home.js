@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { useAuth, useSignOut } from '@clerk/clerk-expo';
 
-const Home = () => {
-  const [selectedEmoji, setSelectedEmoji] = useState(null);  // To track the selected emoji
-  const [selectedLabel, setSelectedLabel] = useState('');  // To track the label of the selected emoji
-  const [message, setMessage] = useState('');  // To track the user's one-sentence message
+export default function Home({ navigation }) {
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const { signOut } = useSignOut();
 
-  // Emojis representing feelings in a circular layout
+  const [selectedEmoji, setSelectedEmoji] = useState(null);
+  const [selectedLabel, setSelectedLabel] = useState('');
+  const [message, setMessage] = useState('');
+
+  // ... existing code ...
+
   const emojis = [
     { label: 'Sad', symbol: '😢', position: { top: '70%', left: '20%' } },
     { label: 'Happy', symbol: '😊', position: { top: '7%', left: '38%' } },
@@ -15,22 +20,33 @@ const Home = () => {
     { label: 'Neutral', symbol: '😐', position: { top: '35%', left: '75%' } },
   ];
 
-  // Function to handle emoji selection
   const handleEmojiPress = (emoji) => {
     setSelectedEmoji(emoji.symbol);
-    setSelectedLabel(emoji.label);  // Set the label when an emoji is pressed
+    setSelectedLabel(emoji.label);
   };
 
-  // Function to handle form submission (optional for now)
   const handleSubmit = () => {
     alert(`Feeling: ${selectedEmoji || 'None'}\nMessage: ${message}`);
   };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigation.replace('SignIn');
+  };
+
+  if (!isLoaded) {
+    return null;
+  }
+
+  if (!userId) {
+    navigation.replace('SignIn');
+    return null;
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>How are you feeling today?</Text>
 
-      {/* Circular Emoji Selection */}
       <View style={styles.emojiCircle}>
         {emojis.map((emoji) => (
           <TouchableOpacity
@@ -38,7 +54,7 @@ const Home = () => {
             style={[
               styles.emojiButton,
               selectedEmoji === emoji.symbol && styles.selectedEmoji,
-              emoji.position  // Absolute positioning for circular layout
+              emoji.position
             ]}
             onPress={() => handleEmojiPress(emoji)}
           >
@@ -47,14 +63,12 @@ const Home = () => {
         ))}
       </View>
 
-      {/* Display selected label below the circle */}
       {selectedLabel ? (
         <Text style={styles.selectedLabel}>
           {selectedLabel}
         </Text>
       ) : null}
 
-      {/* Textbox for additional input */}
       <TextInput
         style={styles.input}
         placeholder="Optional: Why do you feel this way?"
@@ -62,13 +76,12 @@ const Home = () => {
         onChangeText={setMessage}
       />
 
-      {/* Submit Button */}
       <Button title="Submit" onPress={handleSubmit} />
+      <Button title="Sign Out" onPress={handleSignOut} />
     </View>
   );
-};
+}
 
-// Styles for the Home Page
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -121,5 +134,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
 });
-
-export default Home;
