@@ -2,12 +2,15 @@ import React from 'react';
 import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
+import Home from './pages/home';  
+import MoodCalendar from './pages/moodCalender';  
+import LoginPage from './pages/login';  // Import the Login page
 import { tokenCache } from '../clerk';
 import SignInScreen from './pages/SignInScreen';
 import SignUpScreen from './pages/SignUpScreen';
 import Home from './pages/home';
 import MoodCalendar from './pages/moodCalendar';
-
 
 const Stack = createStackNavigator();
 
