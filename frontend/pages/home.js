@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuth, useSignOut } from '@clerk/clerk-expo';
 
-export default function Home({ navigation }) {
+const Home = ({ navigation }) => {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const { signOut } = useSignOut();
 
