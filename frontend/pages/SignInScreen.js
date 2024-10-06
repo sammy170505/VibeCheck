@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Image, Animated, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, Text, Image, Animated, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 
 export default function SignInScreen({ navigation }) {
@@ -49,62 +49,75 @@ export default function SignInScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Animated.View style={{ transform: [{ scale: bounceValue}] }}>
-          <Image
-            source={require('../assests/images/VibeCheck_New_Logo.jpg')}
-            style={styles.image}
-          />
-        </Animated.View>
-      </View>
-      <Text style={styles.label}>Email Address</Text>
-      <TextInput
-        autoCapitalize="none"
-        value={emailAddress}
-        placeholder="Email..."
-        onChangeText={setEmailAddress}
-        style={styles.input}
-      />
-      <Text style={styles.label}>Password</Text>
-      <TextInput
-        value={password}
-        placeholder="Password..."
-        secureTextEntry={true}
-        onChangeText={setPassword}
-        style={styles.input}
-      />
-      
-      <TouchableOpacity style={styles.signInButton} onPress={onSignInPress}>
-        <Text style={styles.signInButtonText}>Sign In</Text>
-      </TouchableOpacity>
-      
-      <Text style={styles.text} onPress={() => navigation.navigate('SignUp')}>
-        Don't have an account? Sign up
-      </Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={100} // Adjust this value as needed for different devices
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
 
-      <Text style = {styles.trademark}>@2024 VibeCheck, All Rights Reserved</Text>
-    </View>
+        <View style={styles.logoContainer}>
+          <Animated.View style={{ transform: [{ scale: bounceValue }] }}>
+            <Image
+              source={require('../assests/images/VibeCheck_New_Logo.jpg')}
+              style={styles.image}
+            />
+          </Animated.View>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Email Address</Text>
+          <TextInput
+            autoCapitalize="none"
+            value={emailAddress}
+            placeholder="Email..."
+            onChangeText={setEmailAddress}
+            style={styles.input}
+          />
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            value={password}
+            placeholder="Password..."
+            secureTextEntry={true}
+            onChangeText={setPassword}
+            style={styles.input}
+          />
+        </View>
+
+        <TouchableOpacity style={styles.signInButton} onPress={onSignInPress}>
+          <Text style={styles.signInButtonText}>Sign In</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.text} onPress={() => navigation.navigate('SignUp')}>
+          Don't have an account? Sign up
+        </Text>
+
+        <Text style={styles.trademark}>@2024 VibeCheck, All Rights Reserved</Text>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#fff4e1',
   },
   logoContainer: {
-    alightItems: 'center',
-    marginBottom: 80,
+    alignItems: 'center',
+    marginBottom: 40, // Adjusted margin
     marginTop: 10,
+    height: 170, // Ensuring the container has a fixed height
   },
   image: {
-    width: '100%',
-    height: 170,
-    marginBottom: 20,
+    width: 170, // Fixed width
+    height: 170, // Fixed height to ensure it doesn't collapse
     resizeMode: 'contain',
+  },
+  inputContainer: {
+    marginBottom: 20, // Add some space between the inputs and the rest of the content
   },
   label: {
     fontSize: 16,
@@ -137,12 +150,9 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
   trademark: {
-    position: 'absolute',
-    bottom: 60,
     fontSize: 12,
     color: '#888',
     textAlign: 'center',
-    left: 0,
-    right: 0,
+    marginTop: 60,
   },
 });

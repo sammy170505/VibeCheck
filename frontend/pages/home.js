@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
-import { useAuth, Clerk } from '@clerk/clerk-expo'; // Updated Clerk import
+import { useAuth } from '@clerk/clerk-expo'; // Correct usage of Clerk hook
 
 const Home = ({ navigation }) => {
-  const { isLoaded, userId } = useAuth();
+  const { isLoaded, userId, signOut } = useAuth(); // Get signOut from the hook
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [selectedLabel, setSelectedLabel] = useState('');
   const [message, setMessage] = useState('');
@@ -27,8 +27,12 @@ const Home = ({ navigation }) => {
   };
 
   const handleSignOut = async () => {
-    await Clerk.signOut(); // Use Clerk.signOut() directly as a fallback
-    navigation.replace('SignIn');
+    try {
+      await signOut(); // Use the correct signOut method from the hook
+      navigation.replace('SignIn');
+    } catch (error) {
+      console.error('Sign out failed', error);
+    }
   };
 
   if (!isLoaded) {
@@ -67,7 +71,6 @@ const Home = ({ navigation }) => {
 
         {selectedLabel ? <Text style={styles.selectedLabel}>{selectedLabel}</Text> : null}
 
-        {/* Conditionally render the TextInput and Vibe Out button only if an emoji is selected */}
         {selectedEmoji && (
           <>
             <TextInput
@@ -87,7 +90,6 @@ const Home = ({ navigation }) => {
           <Text style={styles.signOutButtonText}>Sign Out</Text>
         </TouchableOpacity>
 
-        {/* Custom modal for Vibe Check */}
         <Modal
           animationType="slide"
           transparent={true}
