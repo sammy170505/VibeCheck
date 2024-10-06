@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 
@@ -48,6 +49,10 @@ export default function SignInScreen({ navigation }) {
     </View>
   );
 }
+
+SignInScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 const styles = StyleSheet.create({
   container: {

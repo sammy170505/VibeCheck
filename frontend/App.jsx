@@ -41,3 +41,4 @@ export default function App() {
     </ClerkProvider>
   );
 }
+AppRegistry.registerComponent('main', () => App);
