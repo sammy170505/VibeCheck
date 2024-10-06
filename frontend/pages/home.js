@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
 import { useAuth/*, Clerk */} from '@clerk/clerk-expo'; // Updated Clerk import
+import { get } from 'stack-trace';
+const trace = get();
+
+expect(trace[0].getFileName()).toBe(Home);
 
 const Home = ({ navigation }) => {
   const { isLoaded, userId, signOut } = useAuth();
