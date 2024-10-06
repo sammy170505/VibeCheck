@@ -29,11 +29,6 @@ const Home = ({ navigation }) => {
     alert(`Feeling: ${selectedEmoji || 'None'}\nMessage: ${message}`);
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigation.replace('SignIn');
-  };
-
   if (!isLoaded) {
     return null;
   }
