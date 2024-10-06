@@ -149,10 +149,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'blue',
   },
-  trademark: {
-    fontSize: 12,
-    color: '#888',
-    textAlign: 'center',
-    marginTop: 60,
-  },
 });
