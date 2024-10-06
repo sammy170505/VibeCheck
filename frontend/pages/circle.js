@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
-const users = [{id: 1, name: Luis}, {id: 2, name: Sammi}];
+const users = [{id: 1, name: 'Luis'}, {id: 2, name: 'Sammi'}];
 
 export default function Messages({ navigation }) {
     return (
