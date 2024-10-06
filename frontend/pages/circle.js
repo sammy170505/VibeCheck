@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 const users = [{id: 1, name: Luis}, {id: 2, name: Sammi}];
 
-export default function Messages() {
+export default function Messages({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={style.header}>
@@ -12,6 +12,7 @@ export default function Messages() {
                     <TouchableOpacity
                     key={user.id}
                     style={styles.chatbox}
+                    onPress={() => navigation.navigate('Chat', { userId: user.id, userName: user.name })}
                     >
                         <Text style={styles.username}>{user.name}</Text>
                     </TouchableOpacity>

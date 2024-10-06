@@ -34,6 +34,10 @@ const Home = ({ navigation }) => {
     navigation.replace('SignIn');
   };
 
+  const handleDM = async () => {
+    navigation.navigate('Messages');
+  }
+
   if (!isLoaded) {
     return null;
   }
@@ -45,6 +49,7 @@ const Home = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Button title="Message" onPress={handleDM} />
       <Text style={styles.heading}>How are you feeling today?</Text>
 
       <View style={styles.emojiCircle}>

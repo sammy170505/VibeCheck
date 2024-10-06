@@ -9,6 +9,8 @@ import LoginPage from './pages/login';  // Import the Login page
 import { tokenCache } from '../backend/services/clerk';
 import SignInScreen from './pages/SignInScreen';
 import SignUpScreen from './pages/SignUpScreen';
+import Messages from './pages/circle';
+import ChatRoom from './pages/chatroom';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +34,10 @@ export default function App() {
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="Home" component={Home} />
             {/* <Stack.Screen name="MoodCalendar" component={MoodCalendar} /> */}
+          </Stack.Navigator>
+          <Stack.Navigator>
+            <Stack.Screen name="messages" component={Messages}/>
+            <Stack.Screen name="chatroom" component={ChatRoom}/>
           </Stack.Navigator>
         </NavigationContainer>
       </ClerkLoaded>
