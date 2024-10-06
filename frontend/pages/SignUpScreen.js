@@ -81,20 +81,6 @@ export default function SignUpScreen({ navigation }) {
             style={styles.input}
           />
           <Button title="Verify Email" onPress={onPressVerify} />
-
-          <Button title="Sign Up with Google" onPress={() => onOAuthSignUp('google')} />
-          <Button title="Sign Up with Github" onPress={() => onOAuthSignUp('github')} />
-        </>
-      )}
-      {pendingVerification && (
-        <>
-          <TextInput
-            value={code}
-            placeholder="Verification Code..."
-            onChangeText={setCode}
-            style={styles.input}
-          />
-          <Button title="Verify Email" onPress={onPressVerify} />
         </>
       )}
       <Text style={styles.text} onPress={() => navigation.navigate('SignIn')}>
