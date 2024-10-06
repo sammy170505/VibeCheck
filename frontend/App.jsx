@@ -33,11 +33,9 @@ export default function App() {
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="Home" component={Home} />
-            {/* <Stack.Screen name="MoodCalendar" component={MoodCalendar} /> */}
-          </Stack.Navigator>
-          <Stack.Navigator>
             <Stack.Screen name="messages" component={Messages}/>
             <Stack.Screen name="chatroom" component={ChatRoom}/>
+            {/* <Stack.Screen name="MoodCalendar" component={MoodCalendar} /> */}
           </Stack.Navigator>
         </NavigationContainer>
       </ClerkLoaded>
