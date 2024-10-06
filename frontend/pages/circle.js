@@ -6,7 +6,7 @@ const users = [{id: 1, name: 'Luis'}, {id: 2, name: 'Sammi'}];
 export default function Messages({ navigation }) {
     return (
         <View style={styles.container}>
-            <View style={style.header}>
+            <View style={styles.header}>
                 <Text style={styles.title}>Check-Ins</Text>
                 {users.map((user) => {
                     <TouchableOpacity
