@@ -92,7 +92,6 @@ export default function SignInScreen({ navigation }) {
           Don't have an account? Sign up
         </Text>
 
-        <Text style={styles.trademark}>@2024 VibeCheck, All Rights Reserved</Text>
       </ScrollView>
     </KeyboardAvoidingView>
   );

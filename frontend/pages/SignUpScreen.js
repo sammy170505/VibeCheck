@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Image, Animated, TouchableOpacity } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Image, Animated, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 
 export default function SignUpScreen({ navigation }) {
@@ -72,89 +72,97 @@ export default function SignUpScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Animated.View style={{ transform: [{ scale: bounceValue}] }}>
-          <Image
-            source={require('../assests/images/VibeCheck_New_Logo.jpg')}
-            style={styles.image}
-          />
-        </Animated.View>
-      </View>
-      {!pendingVerification && (
-        <>
-          <Text style={styles.label}>Username</Text>
-          <TextInput
-            autoCapitalize="none"
-            value={username}
-            placeholder="cap.america"
-            onChangeText={setUsername}
-            style={styles.input}
-          />
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            autoCapitalize="none"
-            value={emailAddress}
-            placeholder="steverogers@gmail.com" // Example placeholder
-            onChangeText={setEmailAddress}
-            style={styles.input}
-          />
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            value={password}
-            placeholder="Password..."
-            secureTextEntry={true}
-            onChangeText={setPassword}
-            style={styles.input}
-          />
-          <Text style={styles.label}>Re-enter Password</Text>
-          <TextInput
-            value={reenterPassword}
-            placeholder="Re-enter Password..."
-            secureTextEntry={true}
-            onChangeText={setReenterPassword}
-            style={styles.input}
-          />
-          <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPress}>
-            <Text style={styles.signUpButtonText}>Sign Up</Text>
-          </TouchableOpacity>
-        </>
-      )}
-      {pendingVerification && (
-        <>
-          <TextInput
-            value={code}
-            placeholder="Verification Code..."
-            onChangeText={setCode}
-            style={styles.input}
-          />
-          <Button title="Verify Email" onPress={onPressVerify} />
-        </>
-      )}
-      <Text style={styles.text} onPress={() => navigation.navigate('SignIn')}>
-        Already have an account? Sign in
-      </Text>
-    </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={100} // Adjust this for different devices
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.logoContainer}>
+          <Animated.View style={{ transform: [{ scale: bounceValue }] }}>
+            <Image
+              source={require('../assests/images/VibeCheck_New_Logo.jpg')}
+              style={styles.image}
+            />
+          </Animated.View>
+        </View>
+
+        {!pendingVerification && (
+          <>
+            <Text style={styles.label}>Username</Text>
+            <TextInput
+              autoCapitalize="none"
+              value={username}
+              placeholder="cap.america"
+              onChangeText={setUsername}
+              style={styles.input}
+            />
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              autoCapitalize="none"
+              value={emailAddress}
+              placeholder="steverogers@gmail.com" // Example placeholder
+              onChangeText={setEmailAddress}
+              style={styles.input}
+            />
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              value={password}
+              placeholder="Password..."
+              secureTextEntry={true}
+              onChangeText={setPassword}
+              style={styles.input}
+            />
+            <Text style={styles.label}>Re-enter Password</Text>
+            <TextInput
+              value={reenterPassword}
+              placeholder="Re-enter Password..."
+              secureTextEntry={true}
+              onChangeText={setReenterPassword}
+              style={styles.input}
+            />
+            <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPress}>
+              <Text style={styles.signUpButtonText}>Sign Up</Text>
+            </TouchableOpacity>
+          </>
+        )}
+
+        {pendingVerification && (
+          <>
+            <TextInput
+              value={code}
+              placeholder="Verification Code..."
+              onChangeText={setCode}
+              style={styles.input}
+            />
+            <Button title="Verify Email" onPress={onPressVerify} />
+          </>
+        )}
+
+        <Text style={styles.text} onPress={() => navigation.navigate('SignIn')}>
+          Already have an account? Sign in
+        </Text>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#fff4e1',
   },
   logoContainer: {
-    alightItems: 'center',
-    marginBottom: 82,
+    alignItems: 'center',
+    marginBottom: 60, // Adjusted margin
     marginTop: 10,
+    height: 130, // Ensuring the container has a fixed height
   },
   image: {
-    width: '100%',
-    height: 130,
-    marginBottom: 20,
+    width: 130, // Fixed width
+    height: 130, // Fixed height to ensure it doesn't collapse
     resizeMode: 'contain',
   },
   label: {
