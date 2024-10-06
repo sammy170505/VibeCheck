@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Text, Image, Animated, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, TextInput, StyleSheet, Text, Image, Animated, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 
 export default function SignInScreen({ navigation }) {
@@ -44,6 +44,20 @@ export default function SignInScreen({ navigation }) {
       await setActive({ session: completeSignIn.createdSessionId });
       navigation.replace('Home');
     } catch (err) {
+      const errorCode = err.errors && err.errors[0].code;
+      // Check if the error code indicates the email is not recognized
+      if (errorCode === 'form_identifier_not_found') {
+        Alert.alert(
+          'Account Not Found',
+          "It looks like you don't have an account with us. Would you like to sign up?",
+          [
+            { text: 'Sign Up', onPress: () => navigation.navigate('SignUp') },
+            { text: 'Cancel', style: 'cancel' },
+          ]
+        );
+      } else {
+        Alert.alert('Sign In Error', 'An error occurred during sign in. Please try again.');
+      }
       console.error(JSON.stringify(err, null, 2));
     }
   };
