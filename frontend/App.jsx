@@ -2,7 +2,6 @@ import React from 'react';
 import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { tokenCache } from '../clerk';
 
 import Home from './pages/home';  
 // import MoodCalendar from './pages/moodCalender';  
