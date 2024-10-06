@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Image } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 
 export default function SignUpScreen({ navigation }) {
@@ -47,15 +47,21 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Image
+        source={require('../assests/images/VibeCheckLogo.png')}
+        style={styles.image}
+      />
       {!pendingVerification && (
         <>
+          <Text style={styles.label}>Email</Text>
           <TextInput
             autoCapitalize="none"
             value={emailAddress}
-            placeholder="Email..."
+            placeholder="steverogers@gmail.com" // Example placeholder
             onChangeText={setEmailAddress}
             style={styles.input}
           />
+          <Text style={styles.label}>Password</Text>
           <TextInput
             value={password}
             placeholder="Password..."
@@ -89,6 +95,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#f6ede4',
+  },
+  image: {
+    width: '100%',
+    height: 100,
+    marginBottom: 20,
+    resizeMode: 'contain',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   input: {
     marginBottom: 10,
