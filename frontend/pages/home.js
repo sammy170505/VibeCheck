@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
 import { useAuth, Clerk } from '@clerk/clerk-expo'; // Updated Clerk import
 
 const Home = ({ navigation }) => {
   const { isLoaded, userId } = useAuth();
-
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [selectedLabel, setSelectedLabel] = useState('');
   const [message, setMessage] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const emojis = [
     { label: 'Sad', symbol: '😢', position: { top: '70%', left: '20%' } },
@@ -23,7 +23,7 @@ const Home = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    alert(`Feeling: ${selectedEmoji || 'None'}\nMessage: ${message}`);
+    setModalVisible(true); // Show the modal
   };
 
   const handleSignOut = async () => {
@@ -41,47 +41,72 @@ const Home = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>How are you feeling today?</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={100} // Adjust if needed
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.heading}>How are you feeling today?</Text>
 
-      <View style={styles.emojiCircle}>
-        {emojis.map((emoji) => (
-          <TouchableOpacity
-            key={emoji.label}
-            style={[
-              styles.emojiButton,
-              selectedEmoji === emoji.symbol && styles.selectedEmoji,
-              emoji.position
-            ]}
-            onPress={() => handleEmojiPress(emoji)}
-          >
-            <Text style={styles.emoji}>{emoji.symbol}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+        <View style={styles.emojiCircle}>
+          {emojis.map((emoji) => (
+            <TouchableOpacity
+              key={emoji.label}
+              style={[
+                styles.emojiButton,
+                selectedEmoji === emoji.symbol && styles.selectedEmoji,
+                emoji.position,
+              ]}
+              onPress={() => handleEmojiPress(emoji)}
+            >
+              <Text style={styles.emoji}>{emoji.symbol}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-      {selectedLabel ? (
-        <Text style={styles.selectedLabel}>
-          {selectedLabel}
-        </Text>
-      ) : null}
+        {selectedLabel ? <Text style={styles.selectedLabel}>{selectedLabel}</Text> : null}
 
-      <TextInput
-        style={styles.input}
-        placeholder="Optional: Why do you feel this way?"
-        value={message}
-        onChangeText={setMessage}
-      />
+        {/* Conditionally render the TextInput and Vibe Out button only if an emoji is selected */}
+        {selectedEmoji && (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="Optional: Why do you feel this way?"
+              value={message}
+              onChangeText={setMessage}
+            />
 
-      <Button title="Submit" onPress={handleSubmit} />
-      <Button title="Sign Out" onPress={handleSignOut} />
-    </View>
+            <Button title="Vibe Out" onPress={handleSubmit} />
+          </>
+        )}
+
+        <Button title="Sign Out" onPress={handleSignOut} />
+
+        {/* Custom modal for Vibe Check */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Vibe Check</Text>
+              <Text style={styles.modalEmoji}>{selectedEmoji}</Text>
+              {message ? <Text style={styles.modalMessage}>Message: {message}</Text> : null}
+              <Button title="Close" onPress={() => setModalVisible(false)} color="#FFFFFF" />
+            </View>
+          </View>
+        </Modal>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFF8E1',
@@ -94,30 +119,37 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   emojiCircle: {
-    width: 300,
-    height: 300,
-    borderRadius: 150,
+    width: 350, // Increased the size of the circle
+    height: 350,
+    borderRadius: 175,
     position: 'relative',
     marginBottom: 20,
   },
   emojiButton: {
     position: 'absolute',
     alignItems: 'center',
-    padding: 10,
-    borderRadius: 50,
-    backgroundColor: '#FFE0B2',
-    width: 70,
-    height: 70,
     justifyContent: 'center',
+    padding: 15, // Increased padding for a larger button
+    borderRadius: 70, // Larger radius for the button
+    backgroundColor: '#FFE0B2',
+    width: 90, // Larger button size
+    height: 90,
+    shadowColor: '#000', // Added shadow for depth
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 10,
   },
   emoji: {
-    fontSize: 30,
+    fontSize: 40, // Larger emoji size
   },
   selectedEmoji: {
-    backgroundColor: '#FFB74D',
+    backgroundColor: '#FFB74D', // Highlight selected emoji
+    borderWidth: 2, // Add border to selected emoji
+    borderColor: '#FF9800',
   },
   selectedLabel: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#6A5D5D',
     marginBottom: 20,
   },
@@ -129,6 +161,43 @@ const styles = StyleSheet.create({
     width: '80%',
     marginBottom: 20,
     backgroundColor: '#FFF',
+  },
+
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darken the background
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#FF6F31', // Changed modal background to the requested color
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF', // White text for contrast
+    marginBottom: 20,
+  },
+  modalEmoji: {
+    fontSize: 50, // Larger emoji size for modal
+    color: '#FFFFFF', // White text for emoji
+  },
+  modalMessage: {
+    fontSize: 18,
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#FFFFFF', // White text for contrast
   },
 });
 

@@ -7,8 +7,8 @@ import Home from './pages/home';
 // import MoodCalendar from './pages/moodCalender';  
 import LoginPage from './pages/login';  // Import the Login page
 import { tokenCache } from '../backend/services/clerk';
-// import SignInScreen from './pages/SignInScreen';
-// import SignUpScreen from './pages/SignUpScreen';
+import SignInScreen from './pages/SignInScreen';
+import SignUpScreen from './pages/SignUpScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,8 +28,8 @@ export default function App() {
       <ClerkLoaded>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="SignIn">
-            {/* <Stack.Screen name="SignIn" component={SignInScreen} />
-            <Stack.Screen name="SignUp" component={SignUpScreen} /> */}
+            <Stack.Screen name="SignIn" component={SignInScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="Home" component={Home} />
             {/* <Stack.Screen name="MoodCalendar" component={MoodCalendar} /> */}
           </Stack.Navigator>
