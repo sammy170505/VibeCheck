@@ -25,7 +25,7 @@ export default function Messages({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: center,
+        justifyContent: 'center',
         paddingHorizontal: 20,
     },
     header: {
