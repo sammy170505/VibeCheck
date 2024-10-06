@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
 import { useAuth, Clerk } from '@clerk/clerk-expo'; // Updated Clerk import
 
 const Home = ({ navigation }) => {
@@ -77,11 +77,15 @@ const Home = ({ navigation }) => {
               onChangeText={setMessage}
             />
 
-            <Button title="Vibe Out" onPress={handleSubmit} />
+            <TouchableOpacity style={styles.vibeOutButton} onPress={handleSubmit}>
+              <Text style={styles.vibeOutButtonText}>Vibe Out</Text>
+            </TouchableOpacity>
           </>
         )}
 
-        <Button title="Sign Out" onPress={handleSignOut} />
+        <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+          <Text style={styles.signOutButtonText}>Sign Out</Text>
+        </TouchableOpacity>
 
         {/* Custom modal for Vibe Check */}
         <Modal
@@ -95,7 +99,9 @@ const Home = ({ navigation }) => {
               <Text style={styles.modalTitle}>Vibe Check</Text>
               <Text style={styles.modalEmoji}>{selectedEmoji}</Text>
               {message ? <Text style={styles.modalMessage}>Message: {message}</Text> : null}
-              <Button title="Close" onPress={() => setModalVisible(false)} color="#FFFFFF" />
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Text style={styles.modalCloseButton}>Close</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -162,7 +168,38 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: '#FFF',
   },
-
+  // Custom vibe out button
+  vibeOutButton: {
+    backgroundColor: '#FF6F31', // Bright orange color for standout effect
+    paddingVertical: 15,
+    paddingHorizontal: 50, // Larger button width
+    borderRadius: 30, // Rounded corners for button
+    marginVertical: 20, // Increased margin for more space around the button
+    shadowColor: '#000', // Add shadow for depth
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5, // More shadow opacity for prominence
+    shadowRadius: 10,
+    elevation: 12, // Increased elevation for more 3D effect
+  },
+  vibeOutButtonText: {
+    color: '#FFFFFF', // White text for contrast
+    fontSize: 20, // Increased font size
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  // Sign out button (less standout compared to Vibe Out)
+  signOutButton: {
+    backgroundColor: '#B0BEC5', // Subtle gray color for the sign-out button
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 20,
+    marginVertical: 10,
+  },
+  signOutButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   // Modal styles
   modalContainer: {
     flex: 1,
@@ -198,6 +235,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     color: '#FFFFFF', // White text for contrast
+  },
+  modalCloseButton: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    padding: 10,
+    textAlign: 'center',
   },
 });
 
