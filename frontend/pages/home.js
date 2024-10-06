@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { useAuth, useSignOut } from '@clerk/clerk-expo';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
+import { useAuth, Clerk } from '@clerk/clerk-expo'; // Updated Clerk import
 
 const Home = ({ navigation }) => {
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const { signOut } = useSignOut();
-
+  const { isLoaded, userId } = useAuth();
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [selectedLabel, setSelectedLabel] = useState('');
   const [message, setMessage] = useState('');
-
-  // ... existing code ...
+  const [modalVisible, setModalVisible] = useState(false);
 
   const emojis = [
     { label: 'Sad', symbol: '😢', position: { top: '70%', left: '20%' } },
@@ -26,7 +23,12 @@ const Home = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    alert(`Feeling: ${selectedEmoji || 'None'}\nMessage: ${message}`);
+    setModalVisible(true); // Show the modal
+  };
+
+  const handleSignOut = async () => {
+    await Clerk.signOut(); // Use Clerk.signOut() directly as a fallback
+    navigation.replace('SignIn');
   };
 
   if (!isLoaded) {
@@ -39,94 +41,208 @@ const Home = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>How are you feeling today?</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={100} // Adjust if needed
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.heading}>How are you feeling today?</Text>
 
-      <View style={styles.emojiCircle}>
-        {emojis.map((emoji) => (
-          <TouchableOpacity
-            key={emoji.label}
-            style={[
-              styles.emojiButton,
-              selectedEmoji === emoji.symbol && styles.selectedEmoji,
-              emoji.position
-            ]}
-            onPress={() => handleEmojiPress(emoji)}
-          >
-            <Text style={styles.emoji}>{emoji.symbol}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+        <View style={styles.emojiCircle}>
+          {emojis.map((emoji) => (
+            <TouchableOpacity
+              key={emoji.label}
+              style={[
+                styles.emojiButton,
+                selectedEmoji === emoji.symbol && styles.selectedEmoji,
+                emoji.position,
+              ]}
+              onPress={() => handleEmojiPress(emoji)}
+            >
+              <Text style={styles.emoji}>{emoji.symbol}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-      {selectedLabel ? (
-        <Text style={styles.selectedLabel}>
-          {selectedLabel}
-        </Text>
-      ) : null}
+        {selectedLabel ? <Text style={styles.selectedLabel}>{selectedLabel}</Text> : null}
 
-      <TextInput
-        style={styles.input}
-        placeholder="Optional: Why do you feel this way?"
-        value={message}
-        onChangeText={setMessage}
-      />
+        {/* Conditionally render the TextInput and Vibe Out button only if an emoji is selected */}
+        {selectedEmoji && (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="Optional: Why do you feel this way?"
+              value={message}
+              onChangeText={setMessage}
+            />
 
-      <Button title="Submit" onPress={handleSubmit} />
-      <Button title="Sign Out" onPress={handleSignOut} />
-    </View>
+            <TouchableOpacity style={styles.vibeOutButton} onPress={handleSubmit}>
+              <Text style={styles.vibeOutButtonText}>Vibe Out</Text>
+            </TouchableOpacity>
+          </>
+        )}
+
+        <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
+          <Text style={styles.signOutButtonText}>Sign Out</Text>
+        </TouchableOpacity>
+
+        {/* Custom modal for Vibe Check */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Vibe Check</Text>
+              <Text style={styles.modalEmoji}>{selectedEmoji}</Text>
+              {message ? <Text style={styles.modalMessage}>Message: {message}</Text> : null}
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Text style={styles.modalCloseButton}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF8E1',  // Soft yellow background for calmness
+    backgroundColor: '#FFF8E1',
     padding: 16,
   },
   heading: {
     fontSize: 24,
     marginBottom: 20,
-    color: '#6A5D5D',  // Warm, neutral text color
+    color: '#6A5D5D',
     textAlign: 'center',
   },
   emojiCircle: {
-    width: 300,  // Size of the circle
-    height: 300,
-    borderRadius: 150,
-    position: 'relative',  // Relative positioning for absolute children
+    width: 350, // Increased the size of the circle
+    height: 350,
+    borderRadius: 175,
+    position: 'relative',
     marginBottom: 20,
   },
   emojiButton: {
-    position: 'absolute',  // Allows us to position each emoji in the circle
+    position: 'absolute',
     alignItems: 'center',
-    padding: 10,
-    borderRadius: 50,
-    backgroundColor: '#FFE0B2',  // Light orange for buttons
-    width: 70,
-    height: 70,
     justifyContent: 'center',
+    padding: 15, // Increased padding for a larger button
+    borderRadius: 70, // Larger radius for the button
+    backgroundColor: '#FFE0B2',
+    width: 90, // Larger button size
+    height: 90,
+    shadowColor: '#000', // Added shadow for depth
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 10,
   },
   emoji: {
-    fontSize: 30,
+    fontSize: 40, // Larger emoji size
   },
   selectedEmoji: {
-    backgroundColor: '#FFB74D',  // Highlight selected emoji
+    backgroundColor: '#FFB74D', // Highlight selected emoji
+    borderWidth: 2, // Add border to selected emoji
+    borderColor: '#FF9800',
   },
   selectedLabel: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#6A5D5D',
-    marginBottom: 20,  // Margin between label and text input
+    marginBottom: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#D1C4E9',  // Soft purple for input border
+    borderColor: '#D1C4E9',
     borderRadius: 5,
     padding: 10,
     width: '80%',
     marginBottom: 20,
     backgroundColor: '#FFF',
   },
+  // Custom vibe out button
+  vibeOutButton: {
+    backgroundColor: '#FF6F31', // Bright orange color for standout effect
+    paddingVertical: 15,
+    paddingHorizontal: 50, // Larger button width
+    borderRadius: 30, // Rounded corners for button
+    marginVertical: 20, // Increased margin for more space around the button
+    shadowColor: '#000', // Add shadow for depth
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5, // More shadow opacity for prominence
+    shadowRadius: 10,
+    elevation: 12, // Increased elevation for more 3D effect
+  },
+  vibeOutButtonText: {
+    color: '#FFFFFF', // White text for contrast
+    fontSize: 20, // Increased font size
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  // Sign out button (less standout compared to Vibe Out)
+  signOutButton: {
+    backgroundColor: '#B0BEC5', // Subtle gray color for the sign-out button
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 20,
+    marginVertical: 10,
+  },
+  signOutButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Darken the background
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#FF6F31', // Changed modal background to the requested color
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF', // White text for contrast
+    marginBottom: 20,
+  },
+  modalEmoji: {
+    fontSize: 50, // Larger emoji size for modal
+    color: '#FFFFFF', // White text for emoji
+  },
+  modalMessage: {
+    fontSize: 18,
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#FFFFFF', // White text for contrast
+  },
+  modalCloseButton: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    padding: 10,
+    textAlign: 'center',
+  },
 });
+
 export default Home;
