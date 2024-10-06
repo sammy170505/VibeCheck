@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Image, Alert } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import * as ImagePicker from 'expo-image-picker';
-import { uploadToPinata } from '../utils/pinataService';
+import { uploadToPinata, uploadJSONToPinata } from '../../backend/services/pinataService';
+//import { VibeCheckLogo} from '../assests/images/VibeCheckLogo.png';
+// import { CLERK_API_KEY } from '@env';
+// import { saveUserData } from '../utils/userUtils';
+import PropTypes from 'prop-types';
 
 export default function SignUpScreen({ navigation }) {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -22,11 +26,10 @@ export default function SignUpScreen({ navigation }) {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setProfilePhoto(result.uri);
     }
   };
-
   const onSignUpPress = async () => {
     if (!isLoaded) return;
     if (password !== retypePassword) {
@@ -36,28 +39,27 @@ export default function SignUpScreen({ navigation }) {
 
     try {
       // Create the user in Clerk
-      await signUp.create({
+      const clerkUser = await signUp.create({
         username,
         emailAddress,
         password,
       });
-
+  
       // Upload profile photo to Pinata if provided
-      let profilePhotoUrl = '';
+      let profilePhotoCid = '';
       if (profilePhoto) {
-        profilePhotoUrl = await uploadToPinata(profilePhoto, `${username}_profile.jpg`);
-      } else {
-        profilePhotoUrl = 'assets/images/blank_profile_icon.png';
+        profilePhotoCid = await uploadToPinata(profilePhoto, `${username}_profile.jpg`);
       }
-
+  
       // Save user data to Pinata
       const userData = {
         username,
         email: emailAddress,
-        profilePhotoUrl,
+        userId: clerkUser.id,
+        profilePhotoCid, // Include the profile photo CID
       };
-      await uploadToPinata(JSON.stringify(userData), `${username}_data.json`);
-
+      const userDataCid = await uploadJSONToPinata(userData, `${username}_data.json`);
+  
       // Prepare for email verification
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
       setPendingVerification(true);
@@ -76,7 +78,7 @@ export default function SignUpScreen({ navigation }) {
       });
 
       await setActive({ session: completeSignUp.createdSessionId });
-      navigation.replace('HomeDrawer');
+      navigation.replace('Home');
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
       Alert.alert('Error', err.message);
@@ -86,7 +88,7 @@ export default function SignUpScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/images/VibeCheckLogo.png')}
+        source={require('../assests/images/VibeCheckLogo.png')}
         style={styles.image}
       />
       {!pendingVerification && (
@@ -95,7 +97,7 @@ export default function SignUpScreen({ navigation }) {
           <TextInput
             value={username}
             onChangeText={setUsername}
-            placeholder="Choose a unique username"
+            placeholder="Choose an unique username"
             style={styles.input}
           />
           <Text style={styles.label}>Email</Text>
@@ -144,6 +146,10 @@ export default function SignUpScreen({ navigation }) {
     </View>
   );
 }
+
+SignUpScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
-import { useAuth, Clerk } from '@clerk/clerk-expo'; // Updated Clerk import
+import { useAuth, signOut, signIn } from '@clerk/clerk-expo';
+import * as Clerk from '@clerk/clerk-expo'; // Updated Clerk import
 
 const Home = ({ navigation }) => {
   const { isLoaded, userId } = useAuth();
