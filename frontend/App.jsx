@@ -10,6 +10,7 @@ import SignInScreen from './pages/SignInScreen';
 import SignUpScreen from './pages/SignUpScreen';
 import CheckIn from './pages/CheckIn';
 import CustomDrawerContent from './components/CustomDrawerContent';
+import WelcomeScreen from './pages/WelcomeScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -30,15 +31,19 @@ function HomeDrawer() {
 
 export default function App() {
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="HomeDrawer" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="HomeDrawer" component={HomeDrawer} />
-          <Stack.Screen name="SignIn" component={SignInScreen} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+    <ClerkProvider
+      publishableKey={publishableKey}
+      tokenCache={tokenCache}
+    >
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Welcome">
+            <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="SignIn" component={SignInScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+            <Stack.Screen name="Home" component={Home} />
+            {/* <Stack.Screen name="MoodCalendar" component={MoodCalendar} /> */}
+          </Stack.Navigator>
+        </NavigationContainer>
     </ClerkProvider>
   );
 }
-AppRegistry.registerComponent('main', () => App);

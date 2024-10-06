@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Image, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Button, StyleSheet, Text, Image, Alert, Animated, TouchableOpacity } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadToPinata, uploadJSONToPinata } from '../../backend/services/pinataService';
@@ -13,7 +13,7 @@ export default function SignUpScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
-  const [retypePassword, setRetypePassword] = useState('');
+  const [reenterPassword, setReenterPassword] = useState('');
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
@@ -30,6 +30,29 @@ export default function SignUpScreen({ navigation }) {
       setProfilePhoto(result.uri);
     }
   };
+  const bounceValue = new Animated.Value(1);
+
+  const startBounce = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(bounceValue, {
+          toValue: 1.2,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(bounceValue, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+  useEffect(() => {
+    startBounce(); // Start the bounce animation when the component mounts
+  }, []);
+
   const onSignUpPress = async () => {
     if (!isLoaded) return;
     if (password !== retypePassword) {
@@ -38,8 +61,7 @@ export default function SignUpScreen({ navigation }) {
     }
 
     try {
-      // Create the user in Clerk
-      const clerkUser = await signUp.create({
+      await signUp.create({
         username,
         emailAddress,
         password,
@@ -87,17 +109,22 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assests/images/VibeCheckLogo.png')}
-        style={styles.image}
-      />
+      <View style={styles.logoContainer}>
+        <Animated.View style={{ transform: [{ scale: bounceValue}] }}>
+          <Image
+            source={require('../assests/images/VibeCheck_New_Logo.jpg')}
+            style={styles.image}
+          />
+        </Animated.View>
+      </View>
       {!pendingVerification && (
         <>
           <Text style={styles.label}>Username</Text>
           <TextInput
+            autoCapitalize="none"
             value={username}
+            placeholder="cap.america"
             onChangeText={setUsername}
-            placeholder="Choose an unique username"
             style={styles.input}
           />
           <Text style={styles.label}>Email</Text>
@@ -126,7 +153,17 @@ export default function SignUpScreen({ navigation }) {
           />
           <Button title="Upload Profile Photo" onPress={pickImage} />
           {profilePhoto && <Image source={{ uri: profilePhoto }} style={styles.profilePhoto} />}
-          <Button title="Sign Up" onPress={onSignUpPress} />
+          <Text style={styles.label}>Re-enter Password</Text>
+          <TextInput
+            value={reenterPassword}
+            placeholder="Re-enter Password..."
+            secureTextEntry={true}
+            onChangeText={setReenterPassword}
+            style={styles.input}
+          />
+          <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPress}>
+            <Text style={styles.signUpButtonText}>Sign Up</Text>
+          </TouchableOpacity>
         </>
       )}
       {pendingVerification && (
@@ -156,11 +193,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#f6ede4',
+    backgroundColor: '#fff4e1',
+  },
+  logoContainer: {
+    alightItems: 'center',
+    marginBottom: 82,
+    marginTop: 10,
   },
   image: {
     width: '100%',
-    height: 100,
+    height: 130,
     marginBottom: 20,
     resizeMode: 'contain',
   },
@@ -172,12 +214,25 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
     padding: 10,
-    borderWidth: 1,
+    borderWidth: 3,
     borderColor: '#ccc',
     borderRadius: 5,
   },
-  text: {
+  signUpButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    alignItems: 'center',
     marginTop: 20,
+  },
+  signUpButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  text: {
+    marginTop: 40,
     textAlign: 'center',
     color: 'blue',
   },
