@@ -1,13 +1,38 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Button, StyleSheet, Text, Image, Animated } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 
 export default function SignUpScreen({ navigation }) {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const [username, setUsername] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
+  const [reenterPassword, setReenterPassword] = useState('');
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState('');
+
+  const bounceValue = new Animated.Value(1);
+
+  const startBounce = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(bounceValue, {
+          toValue: 1.2,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(bounceValue, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+  useEffect(() => {
+    startBounce(); // Start the bounce animation when the component mounts
+  }, []);
 
   const onSignUpPress = async () => {
     if (!isLoaded) {
@@ -16,6 +41,7 @@ export default function SignUpScreen({ navigation }) {
 
     try {
       await signUp.create({
+        username,
         emailAddress,
         password,
       });
@@ -47,12 +73,24 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assests/images/VibeCheckLogo.png')}
-        style={styles.image}
-      />
+      <View style={styles.logoContainer}>
+        <Animated.View style={{ transform: [{ scale: bounceValue}] }}>
+          <Image
+            source={require('../assests/images/VibeCheckLogo.png')}
+            style={styles.image}
+          />
+        </Animated.View>
+      </View>
       {!pendingVerification && (
         <>
+          <Text style={styles.label}>Username</Text>
+          <TextInput
+            autoCapitalize="none"
+            value={username}
+            placeholder="cap.america"
+            onChangeText={setUsername}
+            style={styles.input}
+          />
           <Text style={styles.label}>Email</Text>
           <TextInput
             autoCapitalize="none"
@@ -67,6 +105,14 @@ export default function SignUpScreen({ navigation }) {
             placeholder="Password..."
             secureTextEntry={true}
             onChangeText={setPassword}
+            style={styles.input}
+          />
+          <Text style={styles.label}>Re-enter Password</Text>
+          <TextInput
+            value={reenterPassword}
+            placeholder="Re-enter Password..."
+            secureTextEntry={true}
+            onChangeText={setReenterPassword}
             style={styles.input}
           />
           <Button title="Sign Up" onPress={onSignUpPress} />
@@ -90,12 +136,18 @@ export default function SignUpScreen({ navigation }) {
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#f6ede4',
+  },
+  logoContainer: {
+    alightItems: 'center',
+    marginBottom: 80,
+    marginTop: 10,
   },
   image: {
     width: '100%',
@@ -110,13 +162,13 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
-    padding: 10,
-    borderWidth: 1,
+    padding: 18,
+    borderWidth: 3,
     borderColor: '#ccc',
     borderRadius: 5,
   },
   text: {
-    marginTop: 20,
+    marginTop: 40,
     textAlign: 'center',
     color: 'blue',
   },

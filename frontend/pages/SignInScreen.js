@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Button, StyleSheet, Text, Image, Animated } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 
 export default function SignInScreen({ navigation }) {
   const { signIn, setActive, isLoaded } = useSignIn();
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
+
+  const bounceValue = new Animated.Value(1);
+
+  const startBounce = () => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(bounceValue, {
+          toValue: 1.2,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(bounceValue, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  };
+
+  useEffect(() => {
+    startBounce(); // Start the bounce animation when the component mounts
+  }, []);
 
   const onSignInPress = async () => {
     if (!isLoaded) {
@@ -27,6 +50,15 @@ export default function SignInScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Animated.View style={{ transform: [{ scale: bounceValue}] }}>
+          <Image
+            source={require('../assests/images/VibeCheckLogo.png')}
+            style={styles.image}
+          />
+        </Animated.View>
+      </View>
+      <Text style={styles.label}>Email Address</Text>
       <TextInput
         autoCapitalize="none"
         value={emailAddress}
@@ -34,6 +66,7 @@ export default function SignInScreen({ navigation }) {
         onChangeText={setEmailAddress}
         style={styles.input}
       />
+      <Text style={styles.label}>Password</Text>
       <TextInput
         value={password}
         placeholder="Password..."
@@ -54,16 +87,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#f6ede4',
+  },
+  logoContainer: {
+    alightItems: 'center',
+    marginBottom: 80,
+    marginTop: 10,
+  },
+  image: {
+    width: '100%',
+    height: 100,
+    marginBottom: 20,
+    resizeMode: 'contain',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   input: {
     marginBottom: 10,
     padding: 10,
-    borderWidth: 1,
+    borderWidth: 3,
     borderColor: '#ccc',
     borderRadius: 5,
   },
   text: {
-    marginTop: 20,
+    marginTop: 40,
     textAlign: 'center',
     color: 'blue',
   },
