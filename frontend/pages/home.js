@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
-import { useAuth, Clerk } from '@clerk/clerk-expo'; // Updated Clerk import
+import { useAuth/*, Clerk */} from '@clerk/clerk-expo'; // Updated Clerk import
 
 const Home = ({ navigation }) => {
-  const { isLoaded, userId } = useAuth();
+  const { isLoaded, userId, signOut } = useAuth();
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [selectedLabel, setSelectedLabel] = useState('');
   const [message, setMessage] = useState('');
@@ -27,7 +27,7 @@ const Home = ({ navigation }) => {
   };
 
   const handleSignOut = async () => {
-    await Clerk.signOut(); // Use Clerk.signOut() directly as a fallback
+    await signOut(); // Use Clerk.signOut() directly as a fallback
     navigation.replace('SignIn');
   };
 
