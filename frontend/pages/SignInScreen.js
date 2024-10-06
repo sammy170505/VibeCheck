@@ -82,8 +82,6 @@ export default function SignInScreen({ navigation }) {
       <Text style={styles.text} onPress={() => navigation.navigate('SignUp')}>
         Don't have an account? Sign up
       </Text>
-
-      <Text style = {styles.trademark}>@2024 VibeCheck, All Rights Reserved</Text>
     </View>
   );
 }
@@ -135,14 +133,5 @@ const styles = StyleSheet.create({
     marginTop: 40,
     textAlign: 'center',
     color: 'blue',
-  },
-  trademark: {
-    position: 'absolute',
-    bottom: 60,
-    fontSize: 12,
-    color: '#888',
-    textAlign: 'center',
-    left: 0,
-    right: 0,
   },
 });
