@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Image, Animated } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Image, Animated, TouchableOpacity } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 
 export default function SignInScreen({ navigation }) {
@@ -53,7 +53,7 @@ export default function SignInScreen({ navigation }) {
       <View style={styles.logoContainer}>
         <Animated.View style={{ transform: [{ scale: bounceValue}] }}>
           <Image
-            source={require('../assests/images/VibeCheckLogo.png')}
+            source={require('../assests/images/VibeCheck_New_Logo.jpg')}
             style={styles.image}
           />
         </Animated.View>
@@ -74,10 +74,16 @@ export default function SignInScreen({ navigation }) {
         onChangeText={setPassword}
         style={styles.input}
       />
-      <Button title="Sign In" onPress={onSignInPress} />
+      
+      <TouchableOpacity style={styles.signInButton} onPress={onSignInPress}>
+        <Text style={styles.signInButtonText}>Sign In</Text>
+      </TouchableOpacity>
+      
       <Text style={styles.text} onPress={() => navigation.navigate('SignUp')}>
         Don't have an account? Sign up
       </Text>
+
+      <Text style = {styles.trademark}>@2024 VibeCheck, All Rights Reserved</Text>
     </View>
   );
 }
@@ -87,7 +93,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#f6ede4',
+    backgroundColor: '#fff4e1',
   },
   logoContainer: {
     alightItems: 'center',
@@ -96,7 +102,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 100,
+    height: 170,
     marginBottom: 20,
     resizeMode: 'contain',
   },
@@ -112,9 +118,31 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
   },
+  signInButton: {
+    backgroundColor: "#007AFF",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  signInButtonText: {
+    color:'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   text: {
     marginTop: 40,
     textAlign: 'center',
     color: 'blue',
+  },
+  trademark: {
+    position: 'absolute',
+    bottom: 60,
+    fontSize: 12,
+    color: '#888',
+    textAlign: 'center',
+    left: 0,
+    right: 0,
   },
 });

@@ -9,6 +9,7 @@ import LoginPage from './pages/login';  // Import the Login page
 import { tokenCache } from '../backend/services/clerk';
 import SignInScreen from './pages/SignInScreen';
 import SignUpScreen from './pages/SignUpScreen';
+import WelcomeScreen from './pages/WelcomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,7 +28,8 @@ export default function App() {
     >
       <ClerkLoaded>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="SignIn">
+          <Stack.Navigator initialRouteName="Welcome">
+            <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="SignIn" component={SignInScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="Home" component={Home} />

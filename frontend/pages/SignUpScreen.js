@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Image, Animated } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Image, Animated, TouchableOpacity } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
 
 export default function SignUpScreen({ navigation }) {
@@ -76,7 +76,7 @@ export default function SignUpScreen({ navigation }) {
       <View style={styles.logoContainer}>
         <Animated.View style={{ transform: [{ scale: bounceValue}] }}>
           <Image
-            source={require('../assests/images/VibeCheckLogo.png')}
+            source={require('../assests/images/VibeCheck_New_Logo.jpg')}
             style={styles.image}
           />
         </Animated.View>
@@ -115,7 +115,9 @@ export default function SignUpScreen({ navigation }) {
             onChangeText={setReenterPassword}
             style={styles.input}
           />
-          <Button title="Sign Up" onPress={onSignUpPress} />
+          <TouchableOpacity style={styles.signUpButton} onPress={onSignUpPress}>
+            <Text style={styles.signUpButtonText}>Sign Up</Text>
+          </TouchableOpacity>
         </>
       )}
       {pendingVerification && (
@@ -142,16 +144,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#f6ede4',
+    backgroundColor: '#fff4e1',
   },
   logoContainer: {
     alightItems: 'center',
-    marginBottom: 80,
+    marginBottom: 82,
     marginTop: 10,
   },
   image: {
     width: '100%',
-    height: 100,
+    height: 130,
     marginBottom: 20,
     resizeMode: 'contain',
   },
@@ -162,10 +164,23 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
-    padding: 18,
+    padding: 10,
     borderWidth: 3,
     borderColor: '#ccc',
     borderRadius: 5,
+  },
+  signUpButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  signUpButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   text: {
     marginTop: 40,
