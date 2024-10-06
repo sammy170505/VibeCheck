@@ -9,8 +9,6 @@ import LoginPage from './pages/login';  // Import the Login page
 import { tokenCache } from '../clerk';
 import SignInScreen from './pages/SignInScreen';
 import SignUpScreen from './pages/SignUpScreen';
-import Home from './pages/home';
-import MoodCalendar from './pages/moodCalendar';
 
 const Stack = createStackNavigator();
 
