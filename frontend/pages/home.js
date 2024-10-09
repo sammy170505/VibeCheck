@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
 import { useAuth, signOut, signIn } from '@clerk/clerk-expo';
 import * as Clerk from '@clerk/clerk-expo'; // Updated Clerk import
+import PropTypes from 'prop-types';
 
 const Home = ({ navigation }) => {
   const { isLoaded, userId, signOut } = useAuth(); // Get signOut from the hook
@@ -9,6 +10,12 @@ const Home = ({ navigation }) => {
   const [selectedLabel, setSelectedLabel] = useState('');
   const [message, setMessage] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (userId) {
+      navigation.setParams({ userId });
+    }
+  }, [userId]);
 
   const emojis = [
     { label: 'Sad', symbol: '😢', position: { top: '70%', left: '20%' } },
@@ -247,5 +254,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+Home.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 export default Home;
