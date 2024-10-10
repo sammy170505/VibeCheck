@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { View, TextInput, StyleSheet, Text, Image, Animated, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 
@@ -110,6 +111,10 @@ export default function SignInScreen({ navigation }) {
     </KeyboardAvoidingView>
   );
 }
+
+SignInScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 const styles = StyleSheet.create({
   scrollContainer: {

@@ -18,14 +18,25 @@
     "@react-navigation/stack": "^6.4.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
+<<<<<<< HEAD
     "expo": "^51.0.37",
+=======
+    "expo": "^51.0.0",
+    "expo-auth-session": "~5.5.2",
+>>>>>>> 9e34423ca75a4e5d0aae00c35244e05acd7066bd
     "expo-font": "~12.0.10",
+    "expo-image-picker": "~15.0.7",
+    "expo-random": "~14.0.1",
     "expo-secure-store": "~13.0.2",
     "expo-status-bar": "~1.12.1",
     "expo-web-browser": "~13.0.3",
     "express": "^2.5.11",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.0",
+<<<<<<< HEAD
+=======
+    "pinata": "^1.5.0",
+>>>>>>> 9e34423ca75a4e5d0aae00c35244e05acd7066bd
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
