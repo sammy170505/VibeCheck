@@ -36,9 +36,8 @@ The app can analyze emotional exchanges and suggest when friends might need to r
 **Check-In Reminders:**
 VibeCheck can send gentle reminders to users and their close friends to check in with one another after periods of silence, ensuring that they stay emotionally connected even during busy or stressful times.
 
-**Unique Angle:**
+## Our Goal
 VibeCheck makes emotional well-being casual, approachable, and social by using fun, familiar interactions like emojis and memes. It removes the pressure of serious emotional discussions by allowing users to simply express how they feel with a few taps. The app’s focus on lightweight emotional check-ins fosters real-time support between friends without turning the process into something overwhelming or difficult.
 
-**Wellness Goal:**
 The goal of VibeCheck is to keep emotional health at the forefront of relationships in a simple, low-effort way, encouraging friends to support each other daily, especially during rough patches. It helps normalize talking about feelings in casual, bite-sized interactions, making emotional wellness part of everyday life.
 
