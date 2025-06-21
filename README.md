@@ -13,6 +13,7 @@ If someone sends a sad or stressed VibeCheck (e.g., 😔), the app notifies the 
 **Casual Group Check-Ins:**
 Friend groups can set daily or weekly group check-ins where everyone quickly updates their emotional status using emojis or short messages. The app keeps it light, making it easier for people to share their mood without feeling like it’s a serious or difficult task.
 
+***Future Work***
 **Emotion Calendar:**
 Users can view their emotional history on a calendar with simple visual markers (e.g., blue dots for sad days, yellow for happy days), helping them reflect on their emotional patterns. This data can also be shared with friends to encourage deeper conversations when users feel ready.
 
